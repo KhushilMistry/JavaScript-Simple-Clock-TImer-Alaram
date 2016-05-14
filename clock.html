@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<title>clock</title>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js">
+</script>
+</head>
+<body>
+<h1 style="text-align:center;color:grey;">Clock-India</h1>
+<h2 style="text-align:center;">Time</h2>
+<b><p id="time" style="font-size:150%;text-align:center;"></p></b>
+<h2 style="text-align:center;">Date</h2>
+<b><p id="date" style="font-size:150%;text-align:center;"></p></b>
+<b><p id="day" style="font-size:150%;text-align:center;"></p></b>
+<b><p id="display" style="font-size:150%;text-align:center;"></p></b><br>
+<h1 style="text-align:center;color:grey;">Set-Alaram</h2>
+<b><p id="day" style="font-size:150%;text-align:center;">Hour Minute Second</p></b>
+<p style="text-align:center;">
+<input id="sethour" type=number max=24 min=0 step=1 style="text-align:center;" /> 
+<input id="setminute" type=number max=60 min=0 step=1 style="text-align:center;" />
+<input id="setsec" type=number max=60 min=0 step=1 style="text-align:center;" /> 
+<input type=submit value="Set" onclick="setAlaram()"/></p>
+<b><p id="writeAlaram" style="font-size:150%;text-align:center;"></p></b>
+<b><p id="totalsecleft" style="font-size:150%;text-align:center;"></p></b>
+<b><p style="text-align:center;"><audio id="audio" controls autoplay></audio></p></b><br>
+<h1 style="text-align:center;color:grey;">Timer</h1>
+<b><p id="day" style="font-size:150%;text-align:center;">Hour Minute Second</p></b>
+<p style="text-align:center;">
+<input id="timerhour" type=number max=24 min=0 step=1 style="text-align:center;" /> 
+<input id="timerminute" type=number max=60 min=0 step=1 style="text-align:center;" />
+<input id="timersec" type=number max=60 min=0 step=1 style="text-align:center;" /> 
+<input type=submit value="Set" onclick="setTimer();setInterval(displayTimer,1000);"/></p>
+<b><p id="writeTimer" style="font-size:150%;text-align:center;"></p></b>
+<b><p id="totaltimer" style="font-size:150%;text-align:center;"></p></b>
+<b><p style="text-align:center;"><audio id="audiotimer" controls><source src='beep.mp3' type='audio/mpeg'></audio></p></b><br>
+<h1 style="text-align:center;color:grey;">Stop-Watch</h1>
+<b><p id="stopwatch" style="font-size:150%;text-align:center;">00 : 00 : 00</p></b>
+<p style="text-align:center;">
+<input id="input1" type=submit value="Start" onclick="newfunction()" />
+<input id="input2" type=submit value="Stop" onclick="stop()"/>
+<input id="input3" type=submit value="Clear" onclick="clearr()" />
+</p>
+
+<script>
+var i=0;
+var timer;
+var stopsec=0;
+var stopmin=0;
+var stophour=0;
+var xy;
+var py;
+setInterval(displayTime,1000);
+function displayTime()
+{
+	var d=new Date();
+	var day;
+	document.getElementById("time").innerHTML = d.getHours() + " : "+d.getMinutes()+ " : " +d.getSeconds();
+	document.getElementById("date").innerHTML = d.getDate() + " / " +d.getMonth() + " / "+d.getFullYear();
+	switch (d.getDay()) {
+    case 0:
+        day = "Sunday";
+        break;
+    case 1:
+        day = "Monday";
+        break;
+    case 2:
+        day = "Tuesday";
+        break;
+    case 3:
+        day = "Wednesday";
+        break;
+    case 4:
+        day = "Thursday";
+        break;
+    case 5:
+        day = "Friday";
+        break;
+    case 6:
+        day = "Saturday";
+        break;
+}
+	document.getElementById("day").innerHTML=day;
+}
+function setAlaram()
+{
+
+	var dat=new Date();
+	var hoursec=(dat.getHours()*3600);
+	var minutesec=(dat.getMinutes()*60);
+	var sec=dat.getSeconds();
+	var totalsec;
+	var hourvalue=document.getElementById('sethour').value;
+	hour1=hourvalue*3600;
+	var minute=(document.getElementById('setminute').value*60);
+	var seconds=(document.getElementById('setsec').value)*1;
+	var txt=document.getElementById('sethour').value +" : " +document.getElementById('setminute').value+" : "+document.getElementById('setsec').value+" Alaram is setted.";
+	totalsec1=hour1+minute+seconds;
+	totalsec2=hoursec+minutesec+sec;
+	document.getElementById("writeAlaram").innerHTML=txt;
+	if(totalsec1>=totalsec2)
+	{
+		totalsec=totalsec1-totalsec2;
+	}
+	else
+	{
+		totalsec=3600*24+totalsec1-totalsec2;
+	}
+	setInterval(ring,1000*totalsec);
+}
+function ring()
+{
+	document.getElementById("totalsecleft").innerHTML="Ring...!!!";
+	document.getElementById("writeAlaram").innerHTML="Alaram is Off..!!";
+	document.getElementById("audio").innerHTML="<source src='beep.mp3' type='audio/mpeg'>";
+}
+function setTimer()
+{
+	var txt=document.getElementById('timerhour').value +" : " +document.getElementById('timerminute').value+" : "+document.getElementById('timersec').value+" Timer is setted.";
+	document.getElementById("writeTimer").innerHTML=txt;
+	var totaltimersec=document.getElementById('timerhour').value*60*60 + document.getElementById('timerminute').value*60 + document.getElementById('timersec').value*1;
+	timer=totaltimersec;
+	py=setInterval(ringTimer,1000*totaltimersec);
+	
+}
+
+function ringTimer()
+{
+	document.getElementById("writeTimer").innerHTML="Ring...!!!";
+	document.getElementById("audiotimer").play();
+	clearTimeout(py);
+	
+}
+function displayTimer()
+{
+	document.getElementById("totaltimer").innerHTML=timer-1 + " Seconds left";
+	timer--;
+	if(timer<=0)
+	{
+		document.getElementById("totaltimer").innerHTML="Timer is off..!!";
+	}
+}
+function startWatch()
+{
+	stopsec++;
+	if(stopsec==60)
+	{
+	stopsec=0;
+	stopmin++;
+	if(stopmin==60)
+	{
+		stopmin=0;
+		stophour++;
+	}
+	}
+	document.getElementById("stopwatch").innerHTML=stophour+ " : "+stopmin+" : "+stopsec;
+}
+function clearr()
+{
+	document.getElementById("stopwatch").innerHTML="00 : 00 : 00";
+	stopsec=-1;
+	stophour=0;
+	stopmin=0;
+	stop();
+}
+function newfunction()
+{
+	xy=setInterval(startWatch,1000);
+}
+function stop()
+{
+	clearTimeout(xy);
+}
+$(document).ready(function(){
+$("#input2").click(function(){
+	$("#stopwatch").stop();
+});
+});
+</script>
+
+</body>
+</html>
